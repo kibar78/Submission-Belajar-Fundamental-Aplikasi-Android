@@ -23,7 +23,7 @@ class FollowFragment : Fragment() {
     private var _binding : FragmentFollowBinding? = null
     private val binding get() = _binding!!
 
-    private val followViewModel by viewModels<FollowViewModel>(){
+    private val followViewModel by viewModels<FollowViewModel>{
     ViewModelFactory.getInstance(requireActivity().application)
     }
 

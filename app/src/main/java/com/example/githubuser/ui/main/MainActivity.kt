@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val mainViewModel by viewModels<MainViewModel>(){
-        ViewModelFactory.getInstance(application)
+    private val mainViewModel by viewModels<MainViewModel>{
+        ViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             searchView.setupWithSearchBar(searchBar)
             searchView
                 .editText
-                .setOnEditorActionListener{ textView, actionId, event ->
+                .setOnEditorActionListener{ _, _, _ ->
                     searchBar.text = searchView.text
                     searchView.hide()
                     mainViewModel.searchUser(searchView.text.toString())

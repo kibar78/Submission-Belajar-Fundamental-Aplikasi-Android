@@ -14,18 +14,23 @@ class ViewModelFactory private constructor(private val userRepository: UserRepos
     ViewModelProvider.NewInstanceFactory(){
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(userRepository) as T
-        } else if (modelClass.isAssignableFrom(DetailUserViewModel::class.java)){
-            return DetailUserViewModel(userRepository) as T
-        }else if (modelClass.isAssignableFrom(FollowViewModel::class.java)){
-            return FollowViewModel(userRepository) as T
-        } else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)){
-            return FavoriteViewModel(userRepository) as T
-        } else if (modelClass.isAssignableFrom(SettingViewModel::class.java)){
-            return SettingViewModel(userRepository) as T
+        return when{modelClass.isAssignableFrom(MainViewModel::class.java) -> {
+            MainViewModel(userRepository) as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+            modelClass.isAssignableFrom(DetailUserViewModel::class.java) -> {
+            DetailUserViewModel(userRepository) as T
+        }
+            modelClass.isAssignableFrom(FollowViewModel::class.java) -> {
+            FollowViewModel(userRepository) as T
+        }
+            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
+            FavoriteViewModel(userRepository) as T
+        }
+            modelClass.isAssignableFrom(SettingViewModel::class.java) -> {
+            SettingViewModel(userRepository) as T
+        }
+        else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
+        }
     }
 
     companion object {

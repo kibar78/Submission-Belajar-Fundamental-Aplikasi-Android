@@ -15,7 +15,7 @@ class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
     private val adapter = UserAdapter()
     private val favoriteViewModel by viewModels<FavoriteViewModel> {
-        ViewModelFactory.getInstance(application)
+        ViewModelFactory.getInstance(this)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

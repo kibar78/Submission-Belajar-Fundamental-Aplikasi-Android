@@ -20,8 +20,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class DetailUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailUserBinding
 
-    private val detailViewModel by viewModels<DetailUserViewModel>(){
-        ViewModelFactory.getInstance(applicationContext)
+    private val detailViewModel by viewModels<DetailUserViewModel>{
+        ViewModelFactory.getInstance(this)
     }
     private var favoriteStatus: Boolean = false
 
@@ -56,12 +56,12 @@ class DetailUserActivity : AppCompatActivity() {
                 }
             }
             detailViewModel.detailUser.observe(this) {user ->
-                if (user!=null){
+                favoriteStatus = if (user!=null){
                     binding.fabFavorite.setImageResource(R.drawable.ic_favorite)
-                    favoriteStatus = true
+                    true
                 }else{
                     binding.fabFavorite.setImageResource(R.drawable.ic_favorite_border)
-                    favoriteStatus = false
+                    false
                 }
             }
             detailViewModel.getDetailUsername(username.toString())

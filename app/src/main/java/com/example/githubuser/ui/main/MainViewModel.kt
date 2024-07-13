@@ -22,7 +22,6 @@ class MainViewModel (private val userRepository: UserRepository): ViewModel() {
     val themeSetting: Flow<Boolean> = userRepository.getThemeSettings()
 
     companion object{
-        private const val TAG = "MainViewModel"
         private const val USER_ID = "rizki"
     }
 

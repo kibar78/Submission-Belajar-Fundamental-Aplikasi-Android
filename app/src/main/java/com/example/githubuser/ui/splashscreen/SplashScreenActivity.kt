@@ -4,8 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.lifecycle.lifecycleScope
 import com.example.githubuser.R
 import com.example.githubuser.ui.main.MainActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class SplashScreenActivity : AppCompatActivity() {
 
@@ -13,9 +17,10 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-        Handler().postDelayed({
-            startActivity(Intent( this,MainActivity::class.java))
+        lifecycleScope.launch {
+            delay(3.seconds)
+            startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             finish()
-        }, 3000)
+        }
     }
 }
