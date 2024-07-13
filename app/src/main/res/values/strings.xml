@@ -7,7 +7,11 @@
     <string name="tab_text_1">Followers</string>
     <string name="tab_text_2">Following</string>
 
-    <string name="menu_1">Menu 1</string>
+    <string name="menu_1">Favorite</string>
     <string name="menu_2">Setting</string>
     <string name="dark_mode">Dark Mode</string>
+
+    <string name="repo">repository</string>
+    <string name="followers">followers</string>
+    <string name="following">following</string>
 </resources>

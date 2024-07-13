@@ -3,7 +3,7 @@ package com.example.githubuser.data.di
 import android.content.Context
 import com.example.githubuser.data.local.UserRoomDatabase
 import com.example.githubuser.data.remote.ApiConfig
-import com.example.githubuser.data.repository.UserRepository
+import com.example.githubuser.repository.UserRepository
 import com.example.githubuser.ui.setting.SettingPreferences
 import com.example.githubuser.ui.setting.dataStore
 

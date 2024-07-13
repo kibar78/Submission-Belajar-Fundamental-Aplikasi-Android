@@ -4,12 +4,13 @@
     <group android:menuCategory="container">
         <item
             android:id="@+id/menu1"
-            android:icon="@drawable/ic_favorite"
+            android:icon="@drawable/ic_favorite_border"
             android:title="@string/menu_1"
             app:showAsAction="ifRoom" />
         <item
             android:id="@+id/menu2"
+            android:icon="@drawable/ic_settings"
             android:title="@string/menu_2"
-            app:showAsAction="never" />
+            app:showAsAction="ifRoom" />
     </group>
 </menu>

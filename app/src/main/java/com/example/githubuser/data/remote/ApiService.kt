@@ -10,17 +10,12 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("search/users")
-    suspend fun getUser(
-        @Query("q") query: String
-    ): GithubResponse
-
+    suspend fun getUser(@Query("q") query: String): GithubResponse
     @GET("users/{username}")
-    fun getDetailUser(
-        @Path("username") username: String
-    ): Call<DetailUserResponse>
+    suspend fun getDetailUser(@Path("username") username: String): DetailUserResponse
 
     @GET("users/{username}/followers")
-    fun getFollowers(@Path("username") username: String): Call<List<ItemsItem>>
+    suspend fun getFollowers(@Path("username") username: String): List<ItemsItem>
     @GET("users/{username}/following")
-    fun getFollowing(@Path("username") username: String): Call<List<ItemsItem>>
+    suspend fun getFollowing(@Path("username") username: String): List<ItemsItem>
 }

@@ -10,6 +10,7 @@ import com.example.githubuser.ui.main.ViewModelFactory
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingBinding
+
     private val settingViewModel by viewModels<SettingViewModel> {
         ViewModelFactory.getInstance(application)
     }

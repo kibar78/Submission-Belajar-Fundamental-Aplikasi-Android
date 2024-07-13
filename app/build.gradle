@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.example.githubuser'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.githubuser"
@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_KEY", "\"token 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\"")
+        buildConfigField("String", "API_KEY", "\"token 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\"")
     }
 
     buildTypes {

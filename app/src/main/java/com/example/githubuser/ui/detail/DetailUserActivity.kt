@@ -3,16 +3,18 @@ package com.example.githubuser.ui.detail
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.core.view.isGone
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.githubuser.R
-import com.example.githubuser.adapter.SectionPagerAdapter
+import com.example.githubuser.data.model.DetailUserResponse
+import com.example.githubuser.ui.adapter.SectionPagerAdapter
 import com.example.githubuser.databinding.ActivityDetailUserBinding
+import com.example.githubuser.repository.UserUiState
 import com.example.githubuser.ui.main.ViewModelFactory
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity() {
@@ -29,10 +31,23 @@ class DetailUserActivity : AppCompatActivity() {
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        detailViewModel.uiDetailState.observe(this){detailUiState ->
+            when(detailUiState){
+                is UserUiState.Loading ->{
+                    showLoading(true)
+                }
+                is UserUiState.Success ->{
+                    setDetailUser(detailUiState.data)
+                    showLoading(false)
+                }
+                is UserUiState.Error ->{
+                    showLoading(false)
+                }
+            }
+        }
 
         if (intent.getStringExtra(EXTRA_USERNAME) != null){
             val username = intent.getStringExtra(EXTRA_USERNAME)
-
             binding.fabFavorite.setOnClickListener {
                 if (favoriteStatus){
                     detailViewModel.deleteFavorite()
@@ -40,9 +55,6 @@ class DetailUserActivity : AppCompatActivity() {
                     detailViewModel.addFavorite()
                 }
             }
-            detailViewModel.getDetailUsername(username.toString())
-            detailViewModel.getLocalUser(username.toString())
-
             detailViewModel.detailUser.observe(this) {user ->
                 if (user!=null){
                     binding.fabFavorite.setImageResource(R.drawable.ic_favorite)
@@ -55,33 +67,41 @@ class DetailUserActivity : AppCompatActivity() {
             detailViewModel.getDetailUsername(username.toString())
             detailViewModel.getLocalUser(username.toString())
 
-            detailViewModel.listDetailUser.observe(this){user ->
-                Glide.with(this)
-                    .load(user.avatarUrl)
-                    .circleCrop()
-                    .into(binding.ivAvatar)
-                binding.tvName.text = user.name.toString()
-                binding.tvUsername.text = user.login.toString()
-                binding.tvFollowers.text = "${user.followers.toString()} Followers"
-                binding.tvFollowing.text = "${user.following.toString()} Following"
-
-                if (user.location == null){
-                    binding.tvLocation.isGone
-                } else{
-                    binding.tvLocation.text = user.location.toString()
-                }
-            }
             val sectionsPagerAdapter = SectionPagerAdapter(this)
             sectionsPagerAdapter.username = username.toString()
-            val viewPager: ViewPager2 = findViewById(R.id.view_pager)
+            val viewPager = binding.viewPager
             viewPager.adapter = sectionsPagerAdapter
-            val tabs: TabLayout = findViewById(R.id.tabs)
+            val tabs = binding.tabs
             TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = resources.getString(TAB_TITLES[position])
             }.attach()
+        }
+    }
+    private fun showLoading(isLoading: Boolean){
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
+    private fun setDetailUser(detailUser: DetailUserResponse){
+        Glide.with(this)
+            .load(detailUser.avatarUrl)
+            .circleCrop()
+            .into(binding.ivAvatar)
+        binding.tvName.text = detailUser.name.toString()
+        binding.tvRepository.text = detailUser.publicRepos.toString()
+        binding.tvFollowers.text = detailUser.followers.toString()
+        binding.tvFollowing.text = detailUser.following.toString()
+
+        if (detailUser.location == null){
+            binding.tvLocation.text = "-"
+        } else{
+            binding.tvLocation.text = detailUser.location.toString()
         }
 
+        if(detailUser.email == null){
+            binding.tvEmail.text = "-"
+        }else{
+            binding.tvEmail.text = detailUser.email.toString()
+        }
     }
 
     companion object{

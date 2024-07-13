@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubuser.data.local.UserEntity
-import com.example.githubuser.data.repository.UserRepository
+import com.example.githubuser.repository.UserRepository
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(private val repository: UserRepository): ViewModel() {

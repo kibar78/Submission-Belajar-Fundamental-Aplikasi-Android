@@ -13,9 +13,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.githubuser.R
-import com.example.githubuser.adapter.UserAdapter
+import com.example.githubuser.ui.adapter.UserAdapter
 import com.example.githubuser.data.model.ItemsItem
-import com.example.githubuser.data.repository.UserUiState
+import com.example.githubuser.repository.UserUiState
 import com.example.githubuser.databinding.ActivityMainBinding
 import com.example.githubuser.ui.favorite.FavoriteActivity
 import com.example.githubuser.ui.setting.SettingActivity

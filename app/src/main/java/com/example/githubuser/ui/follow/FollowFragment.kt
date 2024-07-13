@@ -5,72 +5,84 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubuser.R
-import com.example.githubuser.adapter.UserAdapter
+import com.example.githubuser.ui.adapter.UserAdapter
 import com.example.githubuser.data.model.ItemsItem
-import com.example.githubuser.ui.detail.DetailUserViewModel
+import com.example.githubuser.databinding.FragmentFollowBinding
+import com.example.githubuser.repository.UserUiState
 import com.example.githubuser.ui.main.ViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FollowFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FollowFragment : Fragment() {
 
     private lateinit var rvFollow: RecyclerView
-    private val detailViewModel by viewModels<DetailUserViewModel>(){
+
+    private var _binding : FragmentFollowBinding? = null
+    private val binding get() = _binding!!
+
+    private val followViewModel by viewModels<FollowViewModel>(){
     ViewModelFactory.getInstance(requireActivity().application)
     }
 
-    // TODO: Rename and change types of parameters
     private var position: Int? = null
     private var username: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            position = it.getInt(ARG_PARAM1)
-            username = it.getString(ARG_PARAM2)
+        arguments.let {
+            position = it?.getInt(ARG_PARAM1)
+            username = it?.getString(ARG_PARAM2)
         }
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_follow, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentFollowBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvFollow = view.findViewById(R.id.rvFollow)
+        rvFollow = binding.rvFollow
 
-        if (position == 1){
-            detailViewModel.getFollower(username.toString())
-            detailViewModel.listFollower.observe(viewLifecycleOwner){
-                setUser(it)
-            }
-        } else {
-            detailViewModel.getFollowing(username.toString())
-            detailViewModel.listFollowing.observe(viewLifecycleOwner){
-                setUser(it)
+        followViewModel.listFollowersState.observe(requireActivity()){stateFollowers->
+            when(stateFollowers){
+                is UserUiState.Loading ->{
+                    showLoading(true)
+                }
+                is UserUiState.Success ->{
+                    setUser(stateFollowers.data)
+                    showLoading(false)
+                }
+                is UserUiState.Error ->{
+                    showLoading(false)
+                }
             }
         }
-
-        detailViewModel.isLoading.observe(requireActivity()) {
-            detailViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                view.findViewById<ProgressBar>(R.id.progressBar).visibility = if (isLoading) View.VISIBLE else View.GONE
+        followViewModel.listFollowingState.observe(requireActivity()){stateFollowing->
+            when(stateFollowing){
+                is UserUiState.Loading ->{
+                    showLoading(true)
+                }
+                is UserUiState.Success ->{
+                    setUser(stateFollowing.data)
+                    showLoading(false)
+                }
+                is UserUiState.Error ->{
+                    showLoading(false)
+                }
             }
+        }
+        if (position == 1){
+            followViewModel.getListFollowers(username.toString())
+        }else{
+            followViewModel.getListFollowing(username.toString())
         }
     }
 
@@ -79,6 +91,14 @@ class FollowFragment : Fragment() {
         adapter.submitList(dataUsers)
         rvFollow.layoutManager = LinearLayoutManager(requireActivity())
         rvFollow.adapter = adapter
+    }
+
+    private fun showLoading(isLoading: Boolean){
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     companion object {

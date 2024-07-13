@@ -3,8 +3,8 @@ package com.example.githubuser.ui.main
 import androidx.lifecycle.*
 import androidx.lifecycle.viewModelScope
 import com.example.githubuser.data.model.ItemsItem
-import com.example.githubuser.data.repository.UserRepository
-import com.example.githubuser.data.repository.UserUiState
+import com.example.githubuser.repository.UserRepository
+import com.example.githubuser.repository.UserUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

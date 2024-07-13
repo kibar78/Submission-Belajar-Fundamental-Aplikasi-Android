@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.githubuser.data.di.Injection
-import com.example.githubuser.data.repository.UserRepository
+import com.example.githubuser.repository.UserRepository
 import com.example.githubuser.ui.detail.DetailUserViewModel
 import com.example.githubuser.ui.favorite.FavoriteViewModel
+import com.example.githubuser.ui.follow.FollowViewModel
 import com.example.githubuser.ui.setting.SettingViewModel
 
 class ViewModelFactory private constructor(private val userRepository: UserRepository):
@@ -17,6 +18,8 @@ class ViewModelFactory private constructor(private val userRepository: UserRepos
             return MainViewModel(userRepository) as T
         } else if (modelClass.isAssignableFrom(DetailUserViewModel::class.java)){
             return DetailUserViewModel(userRepository) as T
+        }else if (modelClass.isAssignableFrom(FollowViewModel::class.java)){
+            return FollowViewModel(userRepository) as T
         } else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)){
             return FavoriteViewModel(userRepository) as T
         } else if (modelClass.isAssignableFrom(SettingViewModel::class.java)){

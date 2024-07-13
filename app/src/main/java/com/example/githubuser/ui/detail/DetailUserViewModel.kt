@@ -9,7 +9,8 @@ import com.example.githubuser.data.local.UserEntity
 import com.example.githubuser.data.model.DetailUserResponse
 import com.example.githubuser.data.remote.ApiConfig
 import com.example.githubuser.data.model.ItemsItem
-import com.example.githubuser.data.repository.UserRepository
+import com.example.githubuser.repository.UserRepository
+import com.example.githubuser.repository.UserUiState
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,17 +18,8 @@ import retrofit2.Response
 
 class DetailUserViewModel(private val userRepository: UserRepository): ViewModel() {
 
-    private val _listDetailUser = MutableLiveData<DetailUserResponse>()
-    val listDetailUser: LiveData<DetailUserResponse> = _listDetailUser
-
-    private val _listFollowing = MutableLiveData<List<ItemsItem?>>()
-    val listFollowing : LiveData<List<ItemsItem?>> = _listFollowing
-
-    private val _listFollower = MutableLiveData<List<ItemsItem?>>()
-    val listFollower : LiveData<List<ItemsItem?>> = _listFollower
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private val _uiDetailState = MutableLiveData<UserUiState<DetailUserResponse>>()
+    val uiDetailState: LiveData<UserUiState<DetailUserResponse>> = _uiDetailState
 
     private val _detailUser = MutableLiveData<UserEntity?>()
     val detailUser: LiveData<UserEntity?> = _detailUser
@@ -41,96 +33,46 @@ class DetailUserViewModel(private val userRepository: UserRepository): ViewModel
         getDetailUsername(USER_ID)
     }
 
-    fun getDetailUsername(user: String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getDetailUser(user)
-        client.enqueue(object : Callback<DetailUserResponse> {
-            override fun onResponse(
-                call: Call<DetailUserResponse>,
-                response: Response<DetailUserResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _listDetailUser.value = response.body()
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<DetailUserResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
-    }
-
-    fun getFollowing(query: String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getFollowing(query)
-        client.enqueue(object : Callback<List<ItemsItem>> {
-            override fun onResponse(
-                call: Call<List<ItemsItem>>,
-                response: Response<List<ItemsItem>>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _listFollowing.value = response.body()
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
-    }
-
-    fun getFollower(query: String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getFollowers(query)
-        client.enqueue(object : Callback<List<ItemsItem>> {
-            override fun onResponse(
-                call: Call<List<ItemsItem>>,
-                response: Response<List<ItemsItem>>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _listFollower.value = response.body()
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
-                _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message.toString()}")
-            }
-        })
+    fun getDetailUsername(username: String) {
+        _uiDetailState.value = UserUiState.Loading
+        viewModelScope.launch {
+           try {
+               _uiDetailState.value = UserUiState.Success(userRepository.getDetailUser(username))
+           } catch (e: Exception){
+               _uiDetailState.value = UserUiState.Error(e.message.toString())
+           }
+        }
     }
 
     fun addFavorite(){
-        viewModelScope.launch {
-            val user = UserEntity(
-                username = _listDetailUser.value?.login.toString(),
-                avatarUrl = _listDetailUser.value?.avatarUrl
-            )
-            userRepository.addFavorite(user)
-
-            getLocalUser(_listDetailUser.value?.login.toString())
+        val currentState = _uiDetailState.value
+        if (currentState is UserUiState.Success) {
+            viewModelScope.launch {
+                val user = UserEntity(
+                        username = currentState.data.login.toString(),
+                        avatarUrl = currentState.data.avatarUrl
+                )
+                userRepository.addFavorite(user)
+                getLocalUser(currentState.data.login.toString())
+            }
+        } else {
+            Log.e(TAG, "Cannot add favorite: No user data available or current state is not success")
         }
     }
 
     fun deleteFavorite(){
+        val currentState = _uiDetailState.value
+        if (currentState is UserUiState.Success) {
         viewModelScope.launch {
             val user = UserEntity(
-                username = _listDetailUser.value?.login.toString(),
-                avatarUrl = _listDetailUser.value?.avatarUrl
-            )
-            userRepository.deleteFavorite(user)
-
-            getLocalUser(_listDetailUser.value?.login.toString())
+                    username = currentState.data.login.toString(),
+                    avatarUrl = currentState.data.avatarUrl
+                )
+                userRepository.deleteFavorite(user)
+            getLocalUser(currentState.data.login.toString())
+        }
+        } else {
+            Log.e(TAG, "Cannot delete favorite: No user data available or current state is not success")
         }
     }
 

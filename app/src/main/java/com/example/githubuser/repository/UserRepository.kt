@@ -1,8 +1,10 @@
-package com.example.githubuser.data.repository
+package com.example.githubuser.repository
 
 import com.example.githubuser.data.local.UserDao
 import com.example.githubuser.data.local.UserEntity
+import com.example.githubuser.data.model.DetailUserResponse
 import com.example.githubuser.data.model.GithubResponse
+import com.example.githubuser.data.model.ItemsItem
 import com.example.githubuser.data.remote.ApiService
 import com.example.githubuser.ui.setting.SettingPreferences
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +16,18 @@ class UserRepository private constructor(
 ){
    suspend fun getListUsers(query: String): GithubResponse {
         return apiService.getUser(query)
+    }
+
+    suspend fun getDetailUser(username: String): DetailUserResponse{
+        return apiService.getDetailUser(username)
+    }
+
+    suspend fun getFollowers(username: String): List<ItemsItem>{
+        return apiService.getFollowers(username)
+    }
+
+    suspend fun getFollowing(username: String): List<ItemsItem>{
+        return apiService.getFollowing(username)
     }
 
     suspend fun addFavorite(user: UserEntity) = userDao.insert(user)
@@ -36,10 +50,7 @@ class UserRepository private constructor(
         settingPreferences.saveThemeSetting(isDarkModeActive)
     }
 
-
     companion object {
-        private const val TAG = "UserRepository"
-
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
@@ -51,5 +62,4 @@ class UserRepository private constructor(
                 instance ?: UserRepository(apiService, newsDao, settingPreferences)
             }.also { instance = it }
     }
-
 }

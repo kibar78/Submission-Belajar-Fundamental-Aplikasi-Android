@@ -1,4 +1,4 @@
-package com.example.githubuser.data.repository
+package com.example.githubuser.repository
 
 sealed class UserUiState<out R> private constructor() {
     data class Success<out T>(val data: T) : UserUiState<T>()
