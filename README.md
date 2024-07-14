@@ -6,20 +6,20 @@ Submission - Belajar fundamental aplikasi android dicoding https://www.dicoding.
 ## Features
 
 ## Screenshot
-<img src=""
+<img src="https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android/blob/master/splashscreen.png"
      alt="Splash Screen"
      style="float: left; margin-right: 10px;"
      width="200" />
-<img src=""
+<img src="https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android/blob/master/listUser.png"
      alt="Main Activity"
      style="float: left; margin-right: 10px;"
      width="200" />
-<img src=""
+<img src="https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android/blob/master/detailUser.png"
      alt="Detail Activity"
      style="float: left; margin-right: 10px;"
      width="200" /> 
-<img src=""
-     alt="About Activity"
+<img src="https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android/blob/master/favoriteUser.png"
+     alt="Favorite Activity"
      style="float: left; margin-right: 10px;"
      width="200" />
      
