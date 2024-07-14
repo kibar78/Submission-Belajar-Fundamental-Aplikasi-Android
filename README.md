@@ -22,6 +22,10 @@ Submission - Belajar fundamental aplikasi android dicoding https://www.dicoding.
      alt="Favorite Activity"
      style="float: left; margin-right: 10px;"
      width="200" />
+<img src="https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android/blob/master/darkmode.png"
+     alt="DarkMode Activity"
+     style="float: left; margin-right: 10px;"
+     width="200" />
      
 ## Closing
 Feel free to clone this repository as an example to help you code! <br>https://github.com/kibar78/Submission-Belajar-Fundamental-Aplikasi-Android.git
