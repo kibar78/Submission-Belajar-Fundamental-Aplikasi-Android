@@ -13,7 +13,8 @@ Dicoding Event adalah aplikasi Android untuk menampilkan acara yang sedang atau 
     - **Finished**: Event yang sudah selesai.
     - **Search**: Cari event berdasarkan kata. kunci.
 - **Detail Event Lengkap**: Tampilkan informasi acara (gambar, nama, ringkasan, waktu, kuota tersisa, deskripsi, link acara).
-- **Loading Indicator**: Loading saat pengambilan data dari API.
+- **Settings**: Dark Mode dan Daily Reminder Event yang akan datang.
+- **Favorite Events**
 
 
 
@@ -25,6 +26,9 @@ Dicoding Event adalah aplikasi Android untuk menampilkan acara yang sedang atau 
     <img src="./ss/finished.png" alt="Screenshot 3" width="150"/>
     <img src="./ss/search.png" alt="Screenshot 4" width="150"/>
     <img src="./ss/detail.png" alt="Screenshot 5" width="150"/>
+    <img src="./ss/favorite.png" alt="Screenshot 6" width="150"/>
+    <img src="./ss/settings.png" alt="Screenshot 7" width="150"/>
+    <img src="./ss/notification.png" alt="Screenshot 8" width="150"/>
 </div>
 
 ## Closing
